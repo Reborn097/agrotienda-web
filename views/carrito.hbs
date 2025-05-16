@@ -1,0 +1,17 @@
+{{! Nada arriba }}
+
+<div class="container mt-4">
+    <h1>Tu Carrito</h1>
+    {{#if carrito.length}}
+        <ul class="list-group">
+            {{#each carrito}}
+                <li class="list-group-item d-flex justify-content-between">
+                    {{descripcion}} - ${{precio}}
+                    <span>Cantidad: {{cantidad}}</span>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No hay productos en tu carrito.</p>
+    {{/if}}
+</div>
