@@ -1,13 +1,11 @@
 <div class="container mt-4">
   <h1 class="mb-4 text-center">Catálogo de Productos</h1>
 
-  <form action="/carrito/agregar" method="post">
-    <input type="hidden" name="id" value="{{id}}">
-    <input type="hidden" name="descripcion" value="{{descripcion}}">
-    <input type="hidden" name="precio" value="{{precio}}">
-    <button type="submit" class="btn btn-primary btn-sm">Agregar al carrito</button>
-</form>
-
+  {{#if (eq ../session.rol "admin")}}
+    <div class="text-end mb-3">
+      <a href="/productos/nuevo" class="btn btn-success">+ Agregar producto</a>
+    </div>
+  {{/if}}
 
   <div class="row">
     {{#each productos}}
@@ -17,7 +15,17 @@
         <div class="card-body">
           <h5 class="card-title">{{descripcion}}</h5>
           <p class="card-text">${{precio}}</p>
-          <a href="#" class="btn btn-primary">Agregar al carrito</a>
+
+          {{#if ../session.usuario}}
+          <form action="/carrito/agregar" method="post">
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="descripcion" value="{{descripcion}}">
+            <input type="hidden" name="precio" value="{{precio}}">
+            <button type="submit" class="btn btn-primary btn-sm">Agregar al carrito</button>
+          </form>
+          {{else}}
+          <p class="text-muted">Inicia sesión para comprar</p>
+          {{/if}}
         </div>
       </div>
     </div>

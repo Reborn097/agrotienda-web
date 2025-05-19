@@ -1,66 +1,58 @@
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const session = require('express-session');
+const hbs = require('hbs');
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const productosRouter = require('./routes/productos');
 const carritoRouter = require('./routes/carrito');
+const usuariosRouter = require('./routes/usuarios');
 
+const app = express();
 
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+// ⬅️ REGISTRA EL HELPER PARA USAR eq EN HANDLBARS
+hbs.registerHelper('eq', (a, b) => a === b);
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
-
-// view engine setup
+// 🟢 CONFIGURACIÓN DEL MOTOR DE VISTAS
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.set('view options', { layout: 'layout' }); // Usa layout.hbs por defecto
 
+// 🛠️ MIDDLEWARES
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));  // 🟢 debe estar antes de las rutas POST
+app.use(express.json());                           // 🟢 igual este
 app.use(cookieParser());
+
 app.use(session({
-    secret: 'claveSecreta123',
-    resave: false,
-    saveUninitialized: true
+  secret: 'claveSecreta123',
+  resave: false,
+  saveUninitialized: true
 }));
-app.use('/carrito', carritoRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 🚏 RUTAS
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/productos', productosRouter);
+app.use('/carrito', carritoRouter);
+app.use('/usuarios', usuariosRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// 🛑 PÁGINA NO ENCONTRADA
+app.use(function (req, res, next) {
+  res.status(404).render('error', { message: 'Página no encontrada' });
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+// ⚠️ MANEJO DE ERRORES
+app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
-
-var productosRouter = require('./routes/productos');
-
-app.use('/productos', productosRouter);
-
-// Página de inicio redirecciona a productos
-app.get('/', (req, res) => {
-  res.redirect('/productos');
-});
-
-app.set('view options', { layout: 'layout' }); // Sin la extensión .hbs
-
-
-
 
 module.exports = app;
