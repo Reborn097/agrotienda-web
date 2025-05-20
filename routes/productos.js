@@ -17,8 +17,12 @@ const upload = multer({ storage });
 
 // Mostrar formulario para nuevo producto
 router.get('/nuevo', (req, res) => {
-  res.render('nuevo_producto', { title: 'Nuevo Producto' });
+  if (!req.session.usuario || req.session.rol !== 'admin') {
+    return res.status(403).send('Acceso denegado');
+  }
+  res.render('nuevo_producto', { title: 'Agregar Producto' });
 });
+
 
 // Guardar producto con imagen
 router.post('/nuevo', upload.single('imagen'), async (req, res) => {

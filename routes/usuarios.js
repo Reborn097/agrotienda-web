@@ -10,7 +10,7 @@ router.get('/login', (req, res) => res.render('login', { title: 'Login' }));
 // Registro de usuario
 router.post('/registrar', async (req, res) => {
   try {
-    console.log('Solicitud de registro recibida:', req.body); // 👈 Agrega esto
+    console.log('Solicitud de registro recibida:', req.body); 
 
     const { nombre, correo, contrasena, rol } = req.body;
 

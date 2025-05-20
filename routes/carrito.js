@@ -25,10 +25,19 @@ router.post('/agregar', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    res.render('carrito', {
-        title: 'Tu Carrito',
-        carrito: req.session.carrito || []
-    });
+  if (!req.session.usuario || req.session.rol !== 'cliente') {
+    return res.redirect('/usuarios/login');
+  }
+
+  const carrito = req.session.carrito || [];
+const total = carrito.reduce((sum, prod) => sum + prod.precio * prod.cantidad, 0);
+res.render('carrito', { title: 'Tu Carrito', carrito, total });
+
+});
+
+router.post('/checkout', (req, res) => {
+  req.session.carrito = [];  // Vaciar carrito
+  res.send('<h2>¡Compra realizada con éxito!</h2><a href="/productos">Seguir comprando</a>');
 });
 
 module.exports = router;

@@ -13,41 +13,49 @@ const usuariosRouter = require('./routes/usuarios');
 
 const app = express();
 
-// ⬅️ REGISTRA EL HELPER PARA USAR eq EN HANDLBARS
+// Registro de helper para Handlebars
 hbs.registerHelper('eq', (a, b) => a === b);
 
-// 🟢 CONFIGURACIÓN DEL MOTOR DE VISTAS
+// Configuración del motor de vistas
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-app.set('view options', { layout: 'layout' }); // Usa layout.hbs por defecto
+app.set('view options', { layout: 'layout' });
 
-// 🛠️ MIDDLEWARES
+// Middlewares
 app.use(logger('dev'));
-app.use(express.urlencoded({ extended: false }));  // 🟢 debe estar antes de las rutas POST
-app.use(express.json());                           // 🟢 igual este
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cookieParser());
 
+// Sesiones
 app.use(session({
   secret: 'claveSecreta123',
   resave: false,
   saveUninitialized: true
 }));
 
+// Pasar la sesión a las vistas
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
+
+// Archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 🚏 RUTAS
+// Rutas
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/productos', productosRouter);
 app.use('/carrito', carritoRouter);
 app.use('/usuarios', usuariosRouter);
 
-// 🛑 PÁGINA NO ENCONTRADA
+// Error 404
 app.use(function (req, res, next) {
   res.status(404).render('error', { message: 'Página no encontrada' });
 });
 
-// ⚠️ MANEJO DE ERRORES
+// Manejador de errores
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
