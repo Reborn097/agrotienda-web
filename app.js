@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
-// Sesiones
+// Sesiones (DEBE ir antes que las rutas que usen req.session)
 app.use(session({
   secret: 'claveSecreta123',
   resave: false,
@@ -46,7 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rutas
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/productos', productosRouter);
+app.use('/productos', productosRouter); // ← Ya está en el lugar correcto
 app.use('/carrito', carritoRouter);
 app.use('/usuarios', usuariosRouter);
 

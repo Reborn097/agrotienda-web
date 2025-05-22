@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Mostrar formulario para nuevo producto
+// Mostrar formulario para nuevo producto 
 router.get('/nuevo', (req, res) => {
   if (!req.session.usuario || req.session.rol !== 'admin') {
     return res.status(403).send('Acceso denegado');
@@ -23,17 +23,33 @@ router.get('/nuevo', (req, res) => {
   res.render('nuevo_producto', { title: 'Agregar Producto' });
 });
 
-
 // Guardar producto con imagen
 router.post('/nuevo', upload.single('imagen'), async (req, res) => {
-  const { descripcion, precio } = req.body;
-  const imagen = '/images/' + req.file.filename;
+  try {
+    const { descripcion, precio } = req.body;
+    const imagen = '/images/' + req.file.filename;
 
-  await db.query('INSERT INTO productos (descripcion, precio, imagen) VALUES (?, ?, ?)', [
-    descripcion, precio, imagen
-  ]);
+    await db.query(
+      'INSERT INTO productos (descripcion, precio, imagen) VALUES (?, ?, ?)',
+      [descripcion, precio, imagen]
+    );
 
-  res.redirect('/productos');
+    res.redirect('/productos');
+  } catch (error) {
+    console.error('Error al guardar producto:', error);
+    res.status(500).send('Error al guardar el producto');
+  }
+});
+
+//Muestra todos los productos
+router.get('/', async (req, res) => {
+  try {
+    const [productos] = await db.query('SELECT * FROM productos');
+    res.render('productos', { title: 'Productos', productos });
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    res.status(500).send('Error al obtener productos');
+  }
 });
 
 module.exports = router;
