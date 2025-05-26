@@ -17,6 +17,7 @@ const app = express();
 hbs.registerHelper('eq', (a, b) => a === b);
 
 // Configuración del motor de vistas
+app.use('/', indexRouter);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.set('view options', { layout: 'layout' });
@@ -44,7 +45,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Rutas
-app.use('/', indexRouter);
+
 app.use('/users', usersRouter);
 app.use('/productos', productosRouter); // ← Ya está en el lugar correcto
 app.use('/carrito', carritoRouter);
