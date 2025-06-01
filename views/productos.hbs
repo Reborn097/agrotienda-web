@@ -27,7 +27,12 @@
             {{/if}}
 
             {{#if (eq ../session.rol "admin")}}
-              <p class="text-muted">Administrador</p>
+              <div class="d-flex justify-content-between">
+                <a href="/productos/editar/{{id}}" class="btn btn-warning btn-sm">Editar</a>
+                <form action="/productos/eliminar/{{id}}" method="post">
+                  <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+              </div>
             {{/if}}
           {{else}}
             <p class="text-muted">Inicia sesión para comprar</p>
