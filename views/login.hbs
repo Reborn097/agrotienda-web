@@ -1,6 +1,19 @@
-<h1>Iniciar Sesión</h1>
-<form action="/usuarios/login" method="post">
-  <input type="email" name="correo" placeholder="Correo" required>
-  <input type="password" name="contrasena" placeholder="Contraseña" required>
-  <button type="submit">Entrar</button>
-</form>
+<div class="container mt-5" style="max-width: 500px;">
+  <h2 class="text-center mb-4">Iniciar Sesión</h2>
+
+  <form action="/usuarios/login" method="POST" class="p-4 border rounded shadow bg-light">
+    <div class="mb-3">
+      <label for="correo" class="form-label">Correo electrónico</label>
+      <input type="email" class="form-control" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="contrasena" class="form-label">Contraseña</label>
+      <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Tu contraseña" required>
+    </div>
+
+    <div class="d-grid">
+      <button type="submit" class="btn btn-success">Entrar</button>
+    </div>
+  </form>
+</div>

@@ -9,25 +9,25 @@
 
   <div class="row">
     {{#each productos}}
-    <div class="col-md-4">
-      <div class="card mb-4">
+    <div class="col-sm-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+      <div class="card mb-4 w-100 h-100">
         <img src="{{imagen}}" class="card-img-top" alt="{{descripcion}}">
-        <div class="card-body">
-          <h5 class="card-title">{{descripcion}}</h5>
-          <p class="card-text">${{precio}}</p>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-center">{{descripcion}}</h5>
+          <p class="card-text text-center">${{precio}}</p>
 
           {{#if ../session.usuario}}
             {{#if (eq ../session.rol "cliente")}}
-              <form action="/carrito/agregar" method="post">
+              <form action="/carrito/agregar" method="post" class="mt-auto">
                 <input type="hidden" name="id" value="{{id}}">
                 <input type="hidden" name="descripcion" value="{{descripcion}}">
                 <input type="hidden" name="precio" value="{{precio}}">
-                <button type="submit" class="btn btn-primary btn-sm">Agregar al carrito</button>
+                <button type="submit" class="btn btn-primary btn-sm w-100">Agregar al carrito</button>
               </form>
             {{/if}}
 
             {{#if (eq ../session.rol "admin")}}
-              <div class="d-flex justify-content-between">
+              <div class="mt-auto d-flex justify-content-between">
                 <a href="/productos/editar/{{id}}" class="btn btn-warning btn-sm">Editar</a>
                 <form action="/productos/eliminar/{{id}}" method="post">
                   <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
@@ -35,9 +35,8 @@
               </div>
             {{/if}}
           {{else}}
-            <p class="text-muted">Inicia sesión para comprar</p>
+            <p class="text-muted text-center mt-auto">Inicia sesión para comprar</p>
           {{/if}}
-
         </div>
       </div>
     </div>

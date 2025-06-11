@@ -6,3 +6,17 @@ body {
 a {
   color: #00B7FF;
 }
+
+.card-img-top {
+  height: 200px;
+  object-fit: contain;
+  padding: 10px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
